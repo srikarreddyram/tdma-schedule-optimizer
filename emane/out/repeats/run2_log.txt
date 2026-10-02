@@ -1,0 +1,149 @@
+== 1. One network namespace per radio, joined by a bridge ==
+== 2. One EMANE instance (one TDMA radio) per namespace ==
+== 3. Radio range as pathloss ==
+pathloss published for 16 NEMs (range 500.0 m)
+== 4. Bridge: Part 1 schedule -> EMANE schedule XML ==
+/tmp/emane-run/optimised_1000us.xml: 16 NEMs, 9 slots of 1000 us per frame
+/tmp/emane-run/distance1_1000us.xml: 16 NEMs, 5 slots of 1000 us per frame
+
+== Schedule: optimised_1000us ==
+nem 1   mac  scheduler.scheduleAcceptFull = 1
+nem 1   mac scheduler.ScheduleInfoTable
+| Index | Frame | Slot | Type | Frequency  | Data Rate | Power | Class | Destination |
+| 0     | 0     | 0    | TX   | 2400000000 | 11000000  | 20.0  | 0     | 0           |
+| 1     | 0     | 1    | RX   | 2400000000 |           |       |       |             |
+| 2     | 0     | 2    | RX   | 2400000000 |           |       |       |             |
+| 3     | 0     | 3    | RX   | 2400000000 |           |       |       |             |
+| 4     | 0     | 4    | RX   | 2400000000 |           |       |       |             |
+| 5     | 0     | 5    | RX   | 2400000000 |           |       |       |             |
+| 6     | 0     | 6    | RX   | 2400000000 |           |       |       |             |
+| 7     | 0     | 7    | RX   | 2400000000 |           |       |       |             |
+| 8     | 0     | 8    | RX   | 2400000000 |           |       |       |             |
+
+In-range links        : 84
+Packets delivered     : 22199 / 25200 (88.1%)
+Links with any loss   : 84
+Out-of-range packets  : 0
+MAC drops (bytes)     : {'Slot Error': 318876}
+Delivery per receiver :
+  Node_01: 93.2%
+  Node_02: 83.9%
+  Node_03: 89.1%
+  Node_04: 88.6%
+  Node_05: 84.3%
+  Node_06: 86.0%
+  Node_07: 90.8%
+  Node_08: 87.5%
+  Node_09: 87.5%
+  Node_10: 87.7%
+  Node_11: 88.9%
+  Node_12: 86.9%
+  Node_13: 90.9%
+  Node_14: 87.2%
+  Node_15: 88.9%
+  Node_16: 92.8%
+
+== Schedule: distance1_1000us ==
+nem 1   mac  scheduler.scheduleAcceptFull = 2
+nem 1   mac scheduler.ScheduleInfoTable
+| Index | Frame | Slot | Type | Frequency  | Data Rate | Power | Class | Destination |
+| 0     | 0     | 0    | TX   | 2400000000 | 11000000  | 20.0  | 0     | 0           |
+| 1     | 0     | 1    | RX   | 2400000000 |           |       |       |             |
+| 2     | 0     | 2    | RX   | 2400000000 |           |       |       |             |
+| 3     | 0     | 3    | RX   | 2400000000 |           |       |       |             |
+| 4     | 0     | 4    | RX   | 2400000000 |           |       |       |             |
+
+In-range links        : 84
+Packets delivered     : 16654 / 25200 (66.1%)
+Links with any loss   : 73
+Out-of-range packets  : 0
+MAC drops (bytes)     : {'SINR': 377248, 'Slot Error': 82640}
+Delivery per receiver :
+  Node_01: 95.0%
+  Node_02: 68.5%
+  Node_03: 80.1%
+  Node_04: 97.6%
+  Node_05: 84.1%
+  Node_06: 74.5%
+  Node_07: 62.4%
+  Node_08: 92.8%
+  Node_09: 42.3%
+  Node_10: 36.0%
+  Node_11: 34.0%
+  Node_12: 58.9%
+  Node_13: 96.1%
+  Node_14: 71.9%
+  Node_15: 47.8%
+  Node_16: 99.3%
+/tmp/emane-run/optimised_10000us.xml: 16 NEMs, 9 slots of 10000 us per frame
+/tmp/emane-run/distance1_10000us.xml: 16 NEMs, 5 slots of 10000 us per frame
+
+== Schedule: optimised_10000us ==
+nem 1   mac  scheduler.scheduleAcceptFull = 3
+nem 1   mac scheduler.ScheduleInfoTable
+| Index | Frame | Slot | Type | Frequency  | Data Rate | Power | Class | Destination |
+| 0     | 0     | 0    | TX   | 2400000000 | 11000000  | 20.0  | 0     | 0           |
+| 1     | 0     | 1    | RX   | 2400000000 |           |       |       |             |
+| 2     | 0     | 2    | RX   | 2400000000 |           |       |       |             |
+| 3     | 0     | 3    | RX   | 2400000000 |           |       |       |             |
+| 4     | 0     | 4    | RX   | 2400000000 |           |       |       |             |
+| 5     | 0     | 5    | RX   | 2400000000 |           |       |       |             |
+| 6     | 0     | 6    | RX   | 2400000000 |           |       |       |             |
+| 7     | 0     | 7    | RX   | 2400000000 |           |       |       |             |
+| 8     | 0     | 8    | RX   | 2400000000 |           |       |       |             |
+
+In-range links        : 84
+Packets delivered     : 25200 / 25200 (100.0%)
+Links with any loss   : 0
+Out-of-range packets  : 0
+MAC drops (bytes)     : none
+Delivery per receiver :
+  Node_01: 100.0%
+  Node_02: 100.0%
+  Node_03: 100.0%
+  Node_04: 100.0%
+  Node_05: 100.0%
+  Node_06: 100.0%
+  Node_07: 100.0%
+  Node_08: 100.0%
+  Node_09: 100.0%
+  Node_10: 100.0%
+  Node_11: 100.0%
+  Node_12: 100.0%
+  Node_13: 100.0%
+  Node_14: 100.0%
+  Node_15: 100.0%
+  Node_16: 100.0%
+
+== Schedule: distance1_10000us ==
+nem 1   mac  scheduler.scheduleAcceptFull = 4
+nem 1   mac scheduler.ScheduleInfoTable
+| Index | Frame | Slot | Type | Frequency  | Data Rate | Power | Class | Destination |
+| 0     | 0     | 0    | TX   | 2400000000 | 11000000  | 20.0  | 0     | 0           |
+| 1     | 0     | 1    | RX   | 2400000000 |           |       |       |             |
+| 2     | 0     | 2    | RX   | 2400000000 |           |       |       |             |
+| 3     | 0     | 3    | RX   | 2400000000 |           |       |       |             |
+| 4     | 0     | 4    | RX   | 2400000000 |           |       |       |             |
+
+In-range links        : 84
+Packets delivered     : 8700 / 25200 (34.5%)
+Links with any loss   : 55
+Out-of-range packets  : 0
+MAC drops (bytes)     : {'SINR': 763124}
+Delivery per receiver :
+  Node_01: 100.0%
+  Node_02: 20.0%
+  Node_03: 20.0%
+  Node_04: 100.0%
+  Node_05: 20.0%
+  Node_06: 12.5%
+  Node_07: 25.0%
+  Node_08: 60.0%
+  Node_09: 20.0%
+  Node_10: 25.0%
+  Node_11: 0.0%
+  Node_12: 20.0%
+  Node_13: 100.0%
+  Node_14: 60.0%
+  Node_15: 20.0%
+  Node_16: 100.0%

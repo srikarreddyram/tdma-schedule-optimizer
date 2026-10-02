@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nem SYSTEM "file:///usr/share/emane/dtd/nem.dtd">
+<!-- One radio: virtual transport (emane0 interface) + TDMA MAC + emulated PHY. -->
+<nem>
+  <transport definition="transvirtual.xml"/>
+  <mac definition="tdmamac.xml"/>
+  <phy>
+    <!-- Link quality comes only from the pathloss events sent by pathloss.py. -->
+    <param name="propagationmodel" value="precomputed"/>
+    <param name="fixedantennagainenable" value="on"/>
+    <param name="fixedantennagain" value="0.0"/>
+    <!-- Count every in-band transmission as interference when computing SINR. -->
+    <param name="noisemode" value="all"/>
+    <param name="systemnoisefigure" value="4.0"/>
+    <param name="subid" value="1"/>
+  </phy>
+</nem>

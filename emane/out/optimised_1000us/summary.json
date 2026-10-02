@@ -1,0 +1,30 @@
+{
+  "links": 84,
+  "sent": 25200,
+  "delivered": 21009,
+  "delivery_percent": 83.4,
+  "lossy_links": 84,
+  "out_of_range_packets": 0,
+  "per_receiver_percent": {
+    "Node_01": 84.4,
+    "Node_02": 83.9,
+    "Node_03": 81.9,
+    "Node_04": 83.6,
+    "Node_05": 84.4,
+    "Node_06": 84.2,
+    "Node_07": 82.5,
+    "Node_08": 80.5,
+    "Node_09": 83.0,
+    "Node_10": 83.4,
+    "Node_11": 84.3,
+    "Node_12": 82.5,
+    "Node_13": 86.4,
+    "Node_14": 82.5,
+    "Node_15": 83.7,
+    "Node_16": 84.4
+  },
+  "mac_bytes_dropped_by_reason": {
+    "Long": 1378,
+    "Slot Error": 444898
+  }
+}
