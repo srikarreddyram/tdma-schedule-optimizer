@@ -54,6 +54,10 @@ of printing a schedule.
    - `DSATUR`: always colour next the node whose neighbours already use the
      most different colours.
    - `largest_first`: colour nodes in order of decreasing number of conflicts.
+
+   Both are written out in `graph_engine.py` (`dsatur`, `largest_first`), and
+   the tests check that they produce exactly the same colourings as
+   networkx's built-in `greedy_color`.
 4. **Lower bound.** A radio and all of its neighbours are pairwise within 2
    hops, so they all need different slots. The busiest radio's neighbour count
    plus one is therefore a floor on the frame length. When the schedule reaches
@@ -87,7 +91,9 @@ and Node_03 share slot 0 although both reach Node_02. A test in
 The tests cover a fully disconnected network (everyone in slot 0), a fully
 connected one (one slot per node), the A–B–C hidden-terminal line, slot reuse
 beyond 2 hops on a longer line, the 16-node grid, 20 random layouts per
-strategy, the validator itself, CLI input handling, and the EMANE bridge.
+strategy, DSATUR on small textbook graphs, the hand-written colouring
+against networkx's, the validator itself, CLI input handling, and the EMANE
+bridge.
 
 ## Part 2: EMANE emulation
 

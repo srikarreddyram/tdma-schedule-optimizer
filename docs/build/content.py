@@ -87,6 +87,10 @@ def part1_design(h):
             "the most different slots (the most constrained node), breaking ties by number of "
             "conflicts. The order adapts as slots are handed out.",
         ]),
+        P("Both orders are written out in graph_engine.py (the functions dsatur and "
+          "largest_first) rather than taken from a library, so each step can be read and "
+          "explained. The tests check that both produce exactly the same colourings as "
+          "networkx's built-in versions; on all 1,500 random layouts of section 4.3 they do."),
         P("If both give the same frame length, the DSATUR schedule is used. Slot numbers are then "
           "relabelled in order of first use, so the first node always gets slot 0 and the output "
           "is identical on every run."),
@@ -107,11 +111,12 @@ def part1_design(h):
             ["Decision", "Alternative considered", "Reason"],
             ["Colour the square of the physical graph",
              "A purpose-built distance-2 colouring routine",
-             "Both give the same schedules. Reducing to ordinary colouring lets well-tested "
-             "library heuristics be used directly."],
-            ["Use networkx for the graph, its square and the colouring",
-             "Hand-written graph code",
-             "The task names networkx. Less code means fewer places for a bug."],
+             "Both give the same schedules. Reducing to ordinary colouring lets the standard "
+             "colouring heuristics be applied directly."],
+            ["networkx for the graph and its square; colouring written by hand",
+             "networkx's greedy_color for the colouring too",
+             "The task names networkx and asks for a colouring algorithm to be written. The "
+             "hand-written colouring is checked against networkx's in the tests."],
             ["Run two heuristics and keep the best", "DSATUR only",
              "The second run is cheap and occasionally wins (section 4.3)."],
             ["Report a lower bound", "Report only the frame length",
@@ -187,7 +192,7 @@ def part1_values(facts, h):
           "result does not equal the lower bound, the schedule was at most 3 slots above it; the "
           "bound itself is not always reachable, so those schedules may still be optimal."),
         P("4.4 Tests", "h2"),
-        P("The pytest suite (57 tests) covers:"),
+        P("The pytest suite (98 tests) covers:"),
         *h["bullets"]([
             "all radios out of range of each other: every radio gets slot 0;",
             "all radios in range of each other: one slot per radio;",
@@ -199,6 +204,9 @@ def part1_values(facts, h):
             "the validator reports a direct collision and a hidden-terminal collision, and "
             "rejects the task's 5-slot sample on the grid;",
             "command-line behaviour, including malformed input;",
+            "DSATUR on small textbook graphs: 3 slots for a 5-cycle, 2 for a 6-cycle;",
+            "20 random layouts per heuristic: the hand-written colouring is identical to "
+            "networkx's;",
             "the EMANE bridge lists exactly the right transmitters in each slot.",
         ]),
     ]

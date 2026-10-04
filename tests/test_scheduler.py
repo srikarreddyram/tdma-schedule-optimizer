@@ -5,6 +5,8 @@ from pathlib import Path
 import pytest
 
 import cli
+import networkx as nx
+
 from graph_engine import (
     STRATEGIES,
     assign_slots,
@@ -128,3 +130,17 @@ def test_bridge_schedule_xml_matches_schedule():
     assert transmitters == {
         index: {node for node in nodes if slots[node] == index} for index in range(9)
     }
+
+
+def test_dsatur_colours_odd_cycle_with_three_and_even_cycle_with_two():
+    assert len(set(STRATEGIES["DSATUR"](nx.cycle_graph(5)).values())) == 3
+    assert len(set(STRATEGIES["DSATUR"](nx.cycle_graph(6)).values())) == 2
+
+
+@pytest.mark.parametrize("strategy", STRATEGIES)
+@pytest.mark.parametrize("seed", range(20))
+def test_hand_written_colouring_matches_networkx(strategy, seed):
+    rng = random.Random(seed)
+    coords = {f"N{i}": (rng.uniform(0, 2000), rng.uniform(0, 2000)) for i in range(30)}
+    conflict = build_conflict_graph(build_physical_graph(coords, RANGE))
+    assert STRATEGIES[strategy](conflict) == nx.greedy_color(conflict, strategy=strategy)

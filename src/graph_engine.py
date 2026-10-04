@@ -5,7 +5,6 @@ import math
 import networkx as nx
 
 DEFAULT_RANGE_M = 500.0
-STRATEGIES = ("DSATUR", "largest_first")
 
 
 def build_physical_graph(coords, radio_range=DEFAULT_RANGE_M):
@@ -27,9 +26,45 @@ def build_conflict_graph(physical):
     return nx.power(physical, 2)
 
 
+def lowest_free_slot(taken):
+    """The smallest slot number not in taken."""
+    return next(slot for slot in itertools.count() if slot not in taken)
+
+
+def largest_first(conflict):
+    """Greedy colouring, visiting nodes by number of conflicts, highest first."""
+    colours = {}
+    for node in sorted(conflict, key=conflict.degree, reverse=True):
+        colours[node] = lowest_free_slot({colours[n] for n in conflict[node] if n in colours})
+    return colours
+
+
+def dsatur(conflict):
+    """Greedy colouring, always picking the most constrained node next (DSATUR).
+
+    A node's saturation is the number of different slots already held by its
+    conflicting neighbours. The uncoloured node with the highest saturation is
+    coloured next, ties going to the node with more conflicts, then to the
+    earlier node. It gets the lowest slot none of its neighbours holds.
+    """
+    colours = {}
+    neighbour_slots = {node: set() for node in conflict}
+    while len(colours) < len(conflict):
+        node = max((n for n in conflict if n not in colours),
+                   key=lambda n: (len(neighbour_slots[n]), conflict.degree(n)))
+        slot = lowest_free_slot(neighbour_slots[node])
+        colours[node] = slot
+        for neighbour in conflict[node]:
+            neighbour_slots[neighbour].add(slot)
+    return colours
+
+
+STRATEGIES = {"DSATUR": dsatur, "largest_first": largest_first}
+
+
 def assign_slots(conflict, strategy):
-    """Greedy-colour the conflict graph; each colour is one time slot."""
-    colours = nx.greedy_color(conflict, strategy=strategy)
+    """Colour the conflict graph with the named strategy; each colour is one time slot."""
+    colours = STRATEGIES[strategy](conflict)
     return _renumber(colours, conflict.nodes)
 
 
