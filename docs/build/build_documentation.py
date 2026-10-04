@@ -141,7 +141,8 @@ def main():
     output = ROOT / "docs" / "documentation.pdf"
     document = SimpleDocTemplate(str(output), pagesize=A4, leftMargin=22 * mm, rightMargin=22 * mm,
                                  topMargin=20 * mm, bottomMargin=20 * mm,
-                                 title="TDMA Schedule Optimizer: project documentation", author=AUTHOR)
+                                 title="TDMA Schedule Optimizer: project documentation", author=AUTHOR,
+                                 subject="Distance-2 TDMA scheduling, verified in EMANE")
     document.build(story, onFirstPage=footer, onLaterPages=footer)
     print(output)
 
