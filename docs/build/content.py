@@ -1,13 +1,27 @@
 """The text of the documentation. build_documentation.py lays it out."""
+import contextlib
+import io
+import json
+
+import cli
 from graph_engine import build_conflict_graph
 
 AUTHOR = "Ramachandra TejSrikar Reddy"
-DATE = "2 October 2026"
+DATE = "5 October 2026"
 
 
 def sections(facts, h):
     return summary(facts, h) + problem(h) + part1_design(h) + part1_values(facts, h) \
         + part2_design(facts, h) + part2_values(facts, h) + limits(h) + reproduce(h)
+
+
+def cli_report(coords):
+    """What the CLI prints for these coordinates, given as a JSON string argument."""
+    argument = json.dumps({node: list(xy) for node, xy in coords.items()}, separators=(",", ":"))
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        cli.main([argument])
+    return output.getvalue()
 
 
 def summary(facts, h):
@@ -90,7 +104,7 @@ def part1_design(h):
         P("Both orders are written out in graph_engine.py (the functions dsatur and "
           "largest_first) rather than taken from a library, so each step can be read and "
           "explained. The tests check that both produce exactly the same colourings as "
-          "networkx's built-in versions; on all 1,500 random layouts of section 4.3 they do."),
+          "networkx's built-in versions; on all 1,500 random layouts of section 4.4 they do."),
         P("If both give the same frame length, the DSATUR schedule is used. Slot numbers are then "
           "relabelled in order of first use, so the first node always gets slot 0 and the output "
           "is identical on every run."),
@@ -118,7 +132,7 @@ def part1_design(h):
              "The task names networkx and asks for a colouring algorithm to be written. The "
              "hand-written colouring is checked against networkx's in the tests."],
             ["Run two heuristics and keep the best", "DSATUR only",
-             "The second run is cheap and occasionally wins (section 4.3)."],
+             "The second run is cheap and occasionally wins (section 4.4)."],
             ["Report a lower bound", "Report only the frame length",
              "Shows whether the heuristic result can still be improved."],
             ["Validate from raw coordinates", "Check the edges of the conflict graph",
@@ -163,7 +177,15 @@ def part1_values(facts, h):
           "radios on opposite edges of the grid. The four interior radios are within two hops of "
           "every other radio, so each needs a slot of its own. That gives 1 + 4 + 4 = 9 slots for "
           "16 radios."),
-        P("4.2 Why 9 slots and not the 5 in the task's sample output", "h2"),
+        h["keep"]([
+        P("4.2 Command-line output", "h2"),
+        P("The CLI takes the coordinates as a JSON string argument in the format given in the "
+          "task (or from a file with --file). This is its complete output for the 16-node grid, "
+          "including the slot x node matrix, in which a 1 means that radio transmits in that slot:"),
+        h["code"]("$ python src/cli.py '{\"Node_01\":[0.0,0.0],\"Node_02\":[300.0,0.0],...,"
+                  "\"Node_16\":[900.0,900.0]}'\n" + cli_report(facts["coords"])),
+        ]),
+        P("4.3 Why 9 slots and not the 5 in the task's sample output", "h2"),
         P("With a 500 m range each radio reaches its horizontal and vertical neighbours (300 m) "
           "and its diagonal neighbours (about 424 m). An interior radio therefore has 8 "
           "neighbours, and those 9 radios must all use different slots. No distance-2 schedule "
@@ -175,7 +197,8 @@ def part1_values(facts, h):
           "this reading: the tool does produce exactly 5 slots for the same grid when the range "
           "is reduced to 350 m (no diagonal links), and section 6 shows in EMANE that the 5-slot "
           "assignment loses packets on this grid."),
-        P("4.3 How the heuristics compare", "h2"),
+        h["keep"]([
+        P("4.4 How the heuristics compare", "h2"),
         P("On the grid both heuristics reach the optimum. To see whether they differ in general, "
           "both were run on 500 random layouts per network size, with radios placed uniformly in "
           "a 2 km x 2 km area and a 500 m range:"),
@@ -186,12 +209,13 @@ def part1_values(facts, h):
             ["30", "25", "1", "474", "439 of 500"],
             ["60", "142", "17", "341", "349 of 500"],
         ], [20, 30, 36, 28, 52]),
+        ]),
         h["gap"](6),
         P("DSATUR is the stronger heuristic and its advantage grows with network size, but "
           "largest_first still wins occasionally, which is why both are run. Where the best "
           "result does not equal the lower bound, the schedule was at most 3 slots above it; the "
           "bound itself is not always reachable, so those schedules may still be optimal."),
-        P("4.4 Tests", "h2"),
+        P("4.5 Tests", "h2"),
         P("The pytest suite (98 tests) covers:"),
         *h["bullets"]([
             "all radios out of range of each other: every radio gets slot 0;",
@@ -284,7 +308,7 @@ def part2_design(facts, h):
           "the grid is:"),
         h["code"](xml_head),
         P("The file is sent with EMANE's own tool, <font face='Courier'>emaneevent-tdmaschedule "
-          "schedule.xml -i emanebr</font>, which turns it into one schedule event per NEM. After "
+          "schedule.xml -i emanebr</font>, which turns it into one EMANE schedule event (a protobuf message) per NEM, each carrying only that NEM's slots. After "
           "sending, the demo reads each radio's scheduler.scheduleAcceptFull counter and its "
           "ScheduleInfoTable to confirm that the schedule was accepted as written."),
         P("5.4 Radio settings", "h2"),
