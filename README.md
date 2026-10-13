@@ -155,6 +155,7 @@ emane/report.py         delivery and drop summary
 emane/run_demo.sh       runs the whole emulation
 emane/out/              recorded results
 docs/documentation.pdf  project documentation
+docs/commands.md        commands to run the project
 docs/build/             script that generates the PDF
 presentation.pptx       slides
 ```
